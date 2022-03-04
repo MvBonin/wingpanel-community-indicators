@@ -35,8 +35,9 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     const int MAX_ICON_SIZE = 20;
 
     //Namarupa Stuff
-    private Gtk.Popover popover;
+    private Gtk.Popover popover = null;
     const int MAX_ICON_SIZE_NAMARUPA = 22;
+    private bool isNamarupa = false;
     
 	//grouping radio buttons
 	private Gtk.RadioButton? group_radio=null ;
@@ -49,6 +50,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         }
 
         Object (code_name: "%s%s".printf ("ayatana-", name_hint));
+        this.isNamarupa = false;
 
         this.entry = entry;
         this.indicator = indicator;
@@ -70,16 +72,8 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         if (entry.menu.get_attach_widget () != null) {
             entry.menu.detach ();
         }
-
+        
         this.visible = true;
-    }
-    public IndicatorButton getNamarupaWidget(){
-        IndicatorButton namarupaButton = new IndicatorButton();
-        namarupaButton.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
-        namarupaButton.add_events (Gdk.EventMask.SCROLL_MASK);
-        namarupaButton.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK);
-
-        return namarupaButton;
     }
 
     public override Gtk.Widget get_display_widget () {
@@ -112,9 +106,13 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
             if (label != null && label is Gtk.Label) {
                 icon.set_widget (IndicatorButton.WidgetSlot.LABEL, label);
             }
+            icon.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
+            icon.add_events (Gdk.EventMask.SCROLL_MASK);
+            icon.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK);
 
             icon.scroll_event.connect (on_scroll);
             icon.button_press_event.connect (on_button_press);
+            icon.enter_notify_event.connect (on_enter_notify_event);
         }
 
         return icon;
@@ -123,8 +121,32 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     public string name_hint () {
         return entry_name_hint;
     }
-
+    public void setIsNamarupa(bool isN){
+        print(this.name_hint() + " is set Namarupa");
+        this.isNamarupa = isN;
+    }
+    public bool getIsNamarupa(){
+        return this.isNamarupa;
+    }
+    public bool namarupa_button_press (Gdk.EventButton event){
+        
+        return Gdk.EVENT_PROPAGATE;
+    }
     public bool on_button_press (Gdk.EventButton event) {
+        print ("ON BUTTON PRESS\n");
+
+        
+
+        if(isNamarupa){
+            print ("ON BUTTON NAMARUPA\n");
+            get_popover();
+            popover.show_all();
+            popover.enter_notify_event.connect((e) => {
+                return Gdk.EVENT_PROPAGATE;
+            });
+
+        }
+
         if (event.button == Gdk.BUTTON_MIDDLE) {
             parent_object.secondary_activate (entry, event.time);
 
@@ -135,11 +157,27 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     }
 
     public bool on_scroll (Gdk.EventScroll event) {
+        print("SCROLLED");
         parent_object.entry_scrolled (entry, 1, (IndicatorAyatana.ScrollDirection)event.direction);
 
         return Gdk.EVENT_PROPAGATE;
     }
+    
+    public bool on_enter_notify_event(Gdk.EventCrossing event){
+        //check if popover is opened and new icon is selected with mouse
+        print("ON FOCUS IN EVENT\n");
+        return Gdk.EVENT_PROPAGATE;
+    }
 
+    public Gtk.Widget? get_popover(){
+        if(popover == null){
+            popover = new Gtk.Popover(icon);
+            
+            popover.add(get_widget());
+
+        }
+        return popover;
+    }
     public override Gtk.Widget? get_widget () {
         if (main_stack == null) {
             bool reloaded = false;
@@ -151,7 +189,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
                      */
                     reloaded = true;
                     //show underlying menu (debug)
-                    //entry.menu.popup_at_widget(icon.parent,0,0);
+                    entry.menu.popup_at_widget(icon.parent,0,0);
                     //entry.menu.popdown ();
                 }
 

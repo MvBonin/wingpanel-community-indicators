@@ -72,7 +72,9 @@
 		cpt++;
         
         //get_widget ();
-        box.add (indicator.get_display_widget());
+        indicator.setIsNamarupa(true);
+        Gtk.Widget indi = indicator.get_display_widget();
+        box.add (indi);
         box.show_all ();
         
         switch_stack (true);

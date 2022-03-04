@@ -138,6 +138,7 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         //Hardcoding them now, can be done via Switchboard plug etc later.
         namarupaNames = new Gee.HashSet<string> ();
         namarupaNames.add("ulauncher");
+        namarupaNames.add("Nextcloud");
     }
 
     private string[] get_restrictions_from_file (File file) {
