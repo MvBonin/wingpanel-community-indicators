@@ -21,7 +21,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     private IndicatorButton icon;
 
     private Gtk.Stack main_stack;
-    private Gtk.ListBox main_list;
+    private Gtk.Grid main_grid;
 
     private unowned IndicatorAyatana.ObjectEntry entry;
     private unowned IndicatorAyatana.Object parent_object;
@@ -178,6 +178,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         }
         return popover;
     }
+    int position = 0;
     public override Gtk.Widget? get_widget () {
         if (main_stack == null) {
             bool reloaded = false;
@@ -199,12 +200,12 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
             main_stack = new Gtk.Stack ();
             main_stack.map.connect (() => {
 				//reload: open first on main_list
-                main_stack.set_visible_child (main_list);
+                main_stack.set_visible_child (main_grid);
                 reloaded = false;
             });
-            main_list = new Gtk.ListBox();
-            main_list.set_size_request(230,-1);
-            main_stack.add (main_list);
+            main_grid = new Gtk.Grid();
+            //main_grid.set_size_request(230,-1);
+            main_stack.add (main_grid);
 
             foreach (var item in entry.menu.get_children ()) {
                 on_menu_widget_insert (item);
@@ -222,7 +223,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
 
         if (w != null) {
             menu_map.set (item, w);
-            main_list.add (w);
+            main_grid.attach (w, 0, position++, 1, 1);
             /* menuitem not visible */
             if (!item.get_visible ()) {
                 w.no_show_all = true;
@@ -237,7 +238,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         var w = menu_map.get (item);
 
         if (w != null) {
-            main_list.remove (w);
+            main_grid.remove (w);
             menu_map.unset (item);
         }
     }
@@ -402,9 +403,9 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
 				var btn_back = new Gtk.ModelButton();
 				btn_back.text= _("Back");
 				btn_back.inverted=true;
-				btn_back.menu_name="main_list";
+				btn_back.menu_name="main_grid";
 				btn_back.clicked.connect(()=>{
-					main_stack.set_visible_child (main_list);
+					main_stack.set_visible_child (main_grid);
 				});
 				sub_list.add(btn_back);
                 //convert
