@@ -128,14 +128,9 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     public bool getIsNamarupa(){
         return this.isNamarupa;
     }
-    public bool namarupa_button_press (Gdk.EventButton event){
-        
-        return Gdk.EVENT_PROPAGATE;
-    }
+
     public bool on_button_press (Gdk.EventButton event) {
         print ("ON BUTTON PRESS\n");
-
-        
 
         if(isNamarupa){
             print ("ON BUTTON NAMARUPA\n");
@@ -146,7 +141,6 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
             });
 
         }
-
         if (event.button == Gdk.BUTTON_MIDDLE) {
             parent_object.secondary_activate (entry, event.time);
 
@@ -178,6 +172,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         }
         return popover;
     }
+    
     int position = 0;
     public override Gtk.Widget? get_widget () {
         if (main_stack == null) {
@@ -190,7 +185,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
                      */
                     reloaded = true;
                     //show underlying menu (debug)
-                    entry.menu.popup_at_widget(icon.parent,0,0);
+                    //entry.menu.popup_at_widget(icon.parent,0,0);
                     //entry.menu.popdown ();
                 }
 
@@ -444,7 +439,9 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
                 });
             } else {
                 button.clicked.connect (() => {
-                    close ();
+                    //if (!isNamarupa){
+                        close ();
+                    //}
                     item.activate ();
                 });
             }
