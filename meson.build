@@ -6,8 +6,9 @@
 project('wingpanel-indicator-ayatana', 'vala', 'c')
 
 sources = [
-    'src/AyatanaIndicator.vala',
     'src/Indicator.vala',
+    'src/MetaIndicator.vala',
+    'src/NamarupaMetaIndicator.vala',
     'src/IndicatorButton.vala',
     'src/IndicatorFactory.vala',
     'src/IndicatorIface.vala',
