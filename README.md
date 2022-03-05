@@ -1,4 +1,7 @@
-# Wingpanel Ayatana-Compatibility Indicator (Community Version)
+# Wingpanel Ayatana-Namarupa-Compatibility Indicator (Community Version)
+
+This fork combines ayatana indicators with the namarupa project, giving the user more freedom of decision, what to show where.
+
 
 <h1>Description:</h1>
 Keep compatibility with ubuntu/unity indicators on Elementary OS wingpanel.
