@@ -2,6 +2,8 @@
 
 This fork combines ayatana indicators with the namarupa project, giving the user more freedom of decision, what to show where.
 
+Right now, indicator settings are hardcoded. We need to work on a Settings menu or a switchboard plug.
+
 
 <h1>Description:</h1>
 Keep compatibility with ubuntu/unity indicators on Elementary OS wingpanel.
