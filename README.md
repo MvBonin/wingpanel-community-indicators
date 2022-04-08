@@ -1,4 +1,4 @@
-# Wingpanel Ayatana-Namarupa-Compatibility Indicator (Community Version)
+# Wingpanel Community Indicators (Ayatana support)
 
 This fork combines ayatana indicators with the namarupa project, giving the user more freedom of decision, what to show where.
 
