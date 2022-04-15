@@ -27,15 +27,6 @@ You'll need the following dependencies :
   
   <pre>sudo apt-get install libwingpanel-dev indicator-application</pre>
 
-<h1>Easy Install (user only)</h1>
-1. Download the deb file from your version :
-
-- <a href="https://github.com/Lafydev/wingpanel-indicator-ayatana/blob/master/com.github.lafydev.wingpanel-indicator-ayatana_2.0.7_amd64.deb">com.github.*amd64.deb</a> for hera and previous  
-- OR <a href="https://github.com/Lafydev/wingpanel-indicator-ayatana/blob/master/com.github.lafydev.wingpanel-indicator-ayatana_2.0.8_odin.deb">com.github.*odin.deb</a>  
-
-and launch install:<br/>
-
-<pre>sudo dpkg -i ./com.github.lafydev.wingpanel*.deb</pre>
 
 <h2>Parameters for Pantheon (eos)</h2>
 2. You need to add Pantheon to the list of desktops abled to work with indicators :<br/>
