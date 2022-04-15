@@ -137,7 +137,6 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         //Load list of Indicators that should be shown on namarupa menu
         //Hardcoding them now, can be done via Switchboard plug etc later.
         namarupaNames = new Gee.HashSet<string> ();
-        namarupaNames.add("ulauncher");
         namarupaNames.add("Nextcloud");
     }
 

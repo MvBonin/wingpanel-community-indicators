@@ -193,11 +193,11 @@
 		msgdial.run ();
 		msgdial.destroy (); // dialog without parent => not perfectly closed */
 
-        /*try {
-            AppInfo.launch_default_for_uri ("settings://namarupa", null);
+        try {
+            AppInfo.launch_default_for_uri ("settings://indicators", null);
         } catch (Error e) {
             warning ("Failed to open notifications settings: %s", e.message);
-        } */
+        }
     }
 
 }
