@@ -15,6 +15,7 @@ sources = [
     'src/IndicatorLoader.vala',
     'src/IndicatorObject.vala',
     'src/SubMenuButton.vala',
+    'src/Settings.vala',
 ]
  wingpanel= dependency('wingpanel-2.0',required : false)
  if not wingpanel.found()

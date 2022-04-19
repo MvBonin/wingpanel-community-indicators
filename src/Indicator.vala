@@ -38,7 +38,8 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     private Gtk.Popover popover = null;
     const int MAX_ICON_SIZE_NAMARUPA = 22;
     private bool isNamarupa = false;
-    
+    //Settings
+    private Settings settings;
 	//grouping radio buttons
 	private Gtk.RadioButton? group_radio=null ;
 	
@@ -51,7 +52,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
 
         Object (code_name: "%s%s".printf ("ayatana-", name_hint));
         this.isNamarupa = false;
-
+        this.settings = Settings.get_instance ();
         this.entry = entry;
         this.indicator = indicator;
         this.parent_object = obj;
