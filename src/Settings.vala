@@ -23,7 +23,7 @@
 
     //If switchboard plug changes settings file
     //we use gio-2.0 (GLib) to track it and call 
-    //settings_file_changed ()
+    //settings_Dir_changed ()
 
     //Indicators inside wingpanel itself are refered to as MAIN, indicators in ... menu as NAMARUPA
     enum Place {
@@ -32,38 +32,179 @@
     }
     //Settings need to store:
     //  -   "Show/hide ... indicator if no indicators are inside of it"
-    private bool showEmptyNamarupa;
+    private bool showEmptyNamarupaIndicator;
     //  -   "Default place for new indicators. (... menu or main)"
     private Place defaultIndicatorsPlace;
     //  -   
 
+    string settingsDir = GLib.Environment.get_home_dir () + "/.config/indicators/";
     Gee.HashSet<string> namarupaNames;
+    Gee.HashSet<string> allIndicators;
+    GLib.File settings_Dir;
     GLib.File settings_File;
+    GLib.File settings_IndicatorNamesFile;
+
     GLib.FileMonitor monitor;
 
     static Settings? instance;
-    private Settings () {
+    private Settings (Gee.HashSet<string> allIndicators) {
+        this.allIndicators = allIndicators;
+        this.namarupaNames = new Gee.HashSet<string> ();
+        print("Settings initiated \n");
+
         //File.make_directory("~/.config/indicators"); //Create dir if it doesn't exist
-        settings_File = File.new_for_commandline_arg(GLib.Environment.get_home_dir () + "/.config/indicators/");
-        settings_File.make_directory_with_parents();
-        monitor = settings_File.monitor_directory(
+        settings_Dir = File.new_for_commandline_arg(settingsDir);
+        settings_File = File.new_for_commandline_arg(settingsDir + "indicators.json");
+        settings_IndicatorNamesFile = File.new_for_commandline_arg(settingsDir + "indicatorNames.json");
+        
+        if (!settings_Dir.query_exists ()){
+            settings_Dir.make_directory_with_parents();
+        }
+        if(!settings_File.query_exists ()){
+            //The Settings file doesn't exist. Create and write one.
+            print("Creating Settings json file, since it does not exist\n");
+            write_file( settings_File, generate_Json_String ());
+        }
+        if(!settings_IndicatorNamesFile.query_exists ()){
+            //The Settings file doesn't exist. Create and write one.
+            print("Creating IndicatorNames json file, since it does not exist\n");
+            write_Indicator_Names (settings_IndicatorNamesFile);
+        } else {
+            //IndicatorNames file exists: load indicator names to the allIndicators List. This way we have all indicators that were open at any time and they dont
+            //disappear from the List after being closed.
+            read_Indicator_Names (settings_IndicatorNamesFile);
+        }
+
+        monitor = settings_File.monitor ( //to track directory use .monitor_directory
             GLib.FileMonitorFlags.NONE
         );
-        monitor.changed.connect(settings_file_changed);
-        print("Monitoring: "+settings_File.get_path()+"\n");
+        monitor.changed.connect(settings_File_changed);
+        print("Monitoring: " + settings_File.get_path() + "\n");
 
         defaultIndicatorsPlace = Place.MAIN;
-        showEmptyNamarupa = true;
+        showEmptyNamarupaIndicator = true;
+        
+
     }
 
-    public static Settings get_instance () {
+    public void indicatorAdded (string name) {
+        allIndicators.add(name);
+        write_Indicator_Names (settings_IndicatorNamesFile);
+    }
+
+    public static Settings get_instance (Gee.HashSet<string> allIndicators) {
         if(instance == null) {
-            instance = new Settings ();
+            instance = new Settings (allIndicators);
         }
         return instance;
     }
 
-    void settings_file_changed () {
-        print("Settings file changed. Updating Settings.\n");
+    void settings_File_changed () {
+        print("Settings File changed. \n");
+        string file = read_file(settings_File);
+        get_Settings_from_Json_string(file);
+        //TODO: Fire event to update settings in MetaIndicator and NamarupaMetaindicator
+
     }
+
+
+    private string read_file(File file) {
+        string output;
+        try {
+
+            GLib.FileUtils.get_contents(file.get_path (), out output);
+
+        } catch (Error e) {
+            error ("%s", e.message);
+        }
+
+        return output;
+    }
+
+    private void write_file(File file, string content) {
+        try {
+
+            GLib.FileUtils.set_contents(file.get_path (), content);
+
+        } catch (Error e) {
+            error ("%s", e.message);
+        }
+    }
+
+    private string generate_Json_String () {
+        Json.Builder builder = new Json.Builder ();
+
+        builder.begin_object ();
+        builder.set_member_name ("namarupaIndicators");
+        builder.begin_array ();
+        foreach (string s in namarupaNames) {
+            builder.add_string_value (s);
+        }
+        builder.end_array ();
+
+        /*builder.set_member_name ("defaultIndicatorsPlace");
+        builder.add_boolean_value (true);
+        builder.end_object ();*/
+
+        builder.set_member_name ("showEmptyNamarupaIndicator");
+        builder.add_boolean_value (true);
+        builder.end_object ();
+
+
+        Json.Generator generator = new Json.Generator ();
+        Json.Node root = builder.get_root ();
+        generator.set_root (root);
+
+        string str = generator.to_data (null);
+
+        return str;
+    }
+
+    private void write_Indicator_Names (File file) {
+        Json.Builder builder = new Json.Builder ();
+
+        builder.begin_object ();
+        builder.set_member_name ("allIndicators");
+        builder.begin_array ();
+        foreach (string s in allIndicators) {
+            builder.add_string_value (s);
+        }
+        builder.end_array ();
+        builder.end_object ();
+        Json.Generator generator = new Json.Generator ();
+        Json.Node root = builder.get_root ();
+        generator.set_root (root);
+
+        string str = generator.to_data (null);
+        write_file(file, str);
+    }  
+    private void read_Indicator_Names (File file) {
+        string jsonString = read_file (file);
+
+        Json.Parser parser = new Json.Parser ();
+        parser.load_from_data (jsonString, -1);
+        Json.Node root = parser.get_root ();
+
+        Json.Array indicator_list = root.get_object ().get_array_member ("allIndicators");
+        foreach (var node in indicator_list.get_elements ()){
+            //print("IND: " + node.get_string () + "\n");
+            this.allIndicators.add(node.get_string ());
+        }
+    }
+
+    private void get_Settings_from_Json_string (string jsonString) {
+        Json.Parser parser = new Json.Parser ();
+        parser.load_from_data (jsonString, -1);
+        Json.Node root = parser.get_root ();
+
+        Json.Array nama_indicator_list = root.get_object ().get_array_member ("namarupaIndicators");
+        foreach (var node in nama_indicator_list.get_elements ()){
+            //print("IND: " + node.get_string () + "\n");
+            this.namarupaNames.add(node.get_string ());
+        }
+        showEmptyNamarupaIndicator = root.get_object ().get_boolean_member ("showEmptyNamarupaIndicator");
+        
+    }
+
+
 }

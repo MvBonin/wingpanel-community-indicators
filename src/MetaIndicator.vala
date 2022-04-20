@@ -18,6 +18,7 @@
 public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
     private Gee.HashSet<string> blacklist;
     private Gee.HashSet<string> namarupaNames;
+    private Gee.HashSet<string> allIndicatorNames;
 
     private IndicatorFactory indicator_loader;
     private NamarupaMetaIndicator namarupaMetaIndicator;
@@ -26,6 +27,8 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
     private bool wingpanel_defer_register = true;
     private bool wingpanel_defer_waiting = false;
 
+    private Settings settings;
+
     public MetaIndicator () {
         Object (code_name: "ayatana_compatibility");
 
@@ -33,7 +36,7 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
 
         load_blacklist ();
         load_namarupa_names ();
-
+        allIndicatorNames = new Gee.HashSet<string> ();
         indicator_loader = new IndicatorFactory ();
 
         this.visible = false;
@@ -42,8 +45,11 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         foreach (var indicator in indicators) {
             load_indicator (indicator);
         }
+        settings = Settings.get_instance( allIndicatorNames );
         //Instanciate Namarupa Indicator
         namarupaMetaIndicator = new NamarupaMetaIndicator(indicators, blacklist, namarupaNames);
+        
+        
     }
 
     public override Gtk.Widget get_display_widget () {
@@ -62,6 +68,9 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
     }
 
     private void create_entry (Indicator indicator) {
+        this.allIndicatorNames.add (indicator.name_hint ());
+        print("added "+ indicator.name_hint () + " to indicatornames...\n");
+        settings.indicatorAdded(indicator.name_hint ());
         if (blacklist.contains (indicator.name_hint ()) || namarupaNames.contains (indicator.name_hint ())) {
             return;
         }

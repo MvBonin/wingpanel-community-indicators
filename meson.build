@@ -22,6 +22,7 @@ sources = [
       wingpanel = dependency('wingpanel',required : true)
     endif
 dependencies = {
+    'json':     dependency('json-glib-1.0'),
     'granite':    dependency('granite'),
     'indicator3': dependency('indicator3-0.4'),
     'wingpanel': wingpanel

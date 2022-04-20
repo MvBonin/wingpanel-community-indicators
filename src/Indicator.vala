@@ -52,7 +52,6 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
 
         Object (code_name: "%s%s".printf ("ayatana-", name_hint));
         this.isNamarupa = false;
-        this.settings = Settings.get_instance ();
         this.entry = entry;
         this.indicator = indicator;
         this.parent_object = obj;
