@@ -33,10 +33,19 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         Object (code_name: "ayatana_compatibility");
 
         deferred_indicators = new Gee.LinkedList<AyatanaCompatibility.Indicator>();
+        allIndicatorNames = new Gee.HashSet<string> ();
+        settings = Settings.get_instance( allIndicatorNames );
 
         load_blacklist ();
-        load_namarupa_names ();
-        allIndicatorNames = new Gee.HashSet<string> ();
+        
+        //Load list of Indicators that should be shown on namarupa menu
+        namarupaNames = settings.get_namarupa_names ();
+        
+        foreach (string s in namarupaNames) {
+            print("Namarupa Indicators - " + s + "\n");
+        }
+
+
         indicator_loader = new IndicatorFactory ();
 
         this.visible = false;
@@ -45,7 +54,7 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         foreach (var indicator in indicators) {
             load_indicator (indicator);
         }
-        settings = Settings.get_instance( allIndicatorNames );
+        
         //Instanciate Namarupa Indicator
         namarupaMetaIndicator = new NamarupaMetaIndicator(indicators, blacklist, namarupaNames);
         
@@ -68,9 +77,13 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
     }
 
     private void create_entry (Indicator indicator) {
-        this.allIndicatorNames.add (indicator.name_hint ());
-        print("added "+ indicator.name_hint () + " to indicatornames...\n");
-        settings.indicatorAdded(indicator.name_hint ());
+
+        if(!blacklist.contains(indicator.name_hint ())){
+            this.allIndicatorNames.add (indicator.name_hint ());
+            print("added "+ indicator.name_hint () + " to indicatornames...\n");
+            settings.indicatorAdded(indicator.name_hint ());
+        }
+
         if (blacklist.contains (indicator.name_hint ()) || namarupaNames.contains (indicator.name_hint ())) {
             return;
         }
@@ -142,12 +155,7 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         }
         blacklist.add("nm-applet"); //old network indicator (duplicate)
     }
-    private void load_namarupa_names (){
-        //Load list of Indicators that should be shown on namarupa menu
-        //Hardcoding them now, can be done via Switchboard plug etc later.
-        namarupaNames = new Gee.HashSet<string> ();
-        namarupaNames.add("Nextcloud");
-    }
+
 
     private string[] get_restrictions_from_file (File file) {
         var restrictions = new string[] {};

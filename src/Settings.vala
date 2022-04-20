@@ -50,6 +50,10 @@
     private Settings (Gee.HashSet<string> allIndicators) {
         this.allIndicators = allIndicators;
         this.namarupaNames = new Gee.HashSet<string> ();
+        namarupaNames.add("Nextcloud");
+        namarupaNames.add("ulauncher");
+        namarupaNames.add("KeePassXC");
+
         print("Settings initiated \n");
 
         //File.make_directory("~/.config/indicators"); //Create dir if it doesn't exist
@@ -85,6 +89,9 @@
         showEmptyNamarupaIndicator = true;
         
 
+    }
+    public Gee.HashSet<string> get_namarupa_names () {
+        return namarupaNames;
     }
 
     public void indicatorAdded (string name) {
@@ -137,7 +144,7 @@
         builder.begin_object ();
         builder.set_member_name ("namarupaIndicators");
         builder.begin_array ();
-        foreach (string s in namarupaNames) {
+        foreach (string s in this.namarupaNames) {
             builder.add_string_value (s);
         }
         builder.end_array ();

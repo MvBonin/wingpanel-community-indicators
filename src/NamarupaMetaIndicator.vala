@@ -82,11 +82,10 @@
 
     private void delete_entry (Indicator indicator) {
         //get_widget ();
-
+        //print("Need to remove indicator " + indicator.name_hint () + " in namarupa.\n");
         foreach (var fbc in box.get_children ()) {
-            var child = (Gtk.Widget)fbc;
-			//see what append when two indicators have the same name ? 
-            if (child is Indicator && ((Indicator)child).code_name == indicator.code_name) {
+            var child = (IndicatorButton)fbc;
+            if (child is IndicatorButton && (((IndicatorButton)child).name_hint () == indicator.name_hint ())) {
                 child.destroy ();
                 cpt--;
 				if (cpt == 0) {

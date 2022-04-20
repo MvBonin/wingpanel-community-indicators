@@ -98,13 +98,13 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
 
                 image.pixel_size = MAX_ICON_SIZE;
 
-                icon.set_widget (IndicatorButton.WidgetSlot.IMAGE, image);
+                icon.set_widget (IndicatorButton.WidgetSlot.IMAGE, image, entry_name_hint);
             }
 
             var label = entry.label;
 
             if (label != null && label is Gtk.Label) {
-                icon.set_widget (IndicatorButton.WidgetSlot.LABEL, label);
+                icon.set_widget (IndicatorButton.WidgetSlot.LABEL, label, entry_name_hint);
             }
             icon.add_events (Gdk.EventMask.BUTTON_PRESS_MASK);
             icon.add_events (Gdk.EventMask.SCROLL_MASK);
@@ -122,7 +122,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         return entry_name_hint;
     }
     public void setIsNamarupa(bool isN){
-        print(this.name_hint() + " is set Namarupa");
+        print(this.name_hint() + " is set Namarupa\n");
         this.isNamarupa = isN;
     }
     public bool getIsNamarupa(){
@@ -130,10 +130,10 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     }
 
     public bool on_button_press (Gdk.EventButton event) {
-        print ("ON BUTTON PRESS\n");
+        //print ("ON BUTTON PRESS\n");
 
         if(isNamarupa){
-            print ("ON BUTTON NAMARUPA\n");
+            //print ("ON BUTTON NAMARUPA\n");
             get_popover();
             popover.show_all();
             popover.enter_notify_event.connect((e) => {
@@ -151,7 +151,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     }
 
     public bool on_scroll (Gdk.EventScroll event) {
-        print("SCROLLED");
+        //print("SCROLLED");
         parent_object.entry_scrolled (entry, 1, (IndicatorAyatana.ScrollDirection)event.direction);
 
         return Gdk.EVENT_PROPAGATE;
@@ -159,7 +159,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     
     public bool on_enter_notify_event(Gdk.EventCrossing event){
         //check if popover is opened and new icon is selected with mouse
-        print("ON FOCUS IN EVENT\n");
+        //print("ON FOCUS IN EVENT\n");
         return Gdk.EVENT_PROPAGATE;
     }
 
