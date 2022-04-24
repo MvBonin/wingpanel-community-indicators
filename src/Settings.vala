@@ -43,12 +43,13 @@
     GLib.File settings_Dir;
     GLib.File settings_File;
     GLib.File settings_IndicatorNamesFile;
+    GLib.File settings_Images_Dir;
 
     GLib.FileMonitor monitor;
 
     static Settings? instance;
-    private Settings (Gee.HashSet<string> allIndicators) {
-        this.allIndicators = allIndicators;
+    private Settings () {
+        this.allIndicators = new Gee.HashSet<string> ();
         this.namarupaNames = new Gee.HashSet<string> ();
         namarupaNames.add("Nextcloud");
         namarupaNames.add("ulauncher");
@@ -57,13 +58,21 @@
         print("Settings initiated \n");
 
         //File.make_directory("~/.config/indicators"); //Create dir if it doesn't exist
-        settings_Dir = File.new_for_commandline_arg(settingsDir);
+        settings_Dir = File.new_for_commandline_arg (settingsDir);
+
+        settings_Images_Dir = File.new_for_commandline_arg (settingsDir + "icons/");
+
         settings_File = File.new_for_commandline_arg(settingsDir + "indicators.json");
         settings_IndicatorNamesFile = File.new_for_commandline_arg(settingsDir + "indicatorNames.json");
         
         if (!settings_Dir.query_exists ()){
             settings_Dir.make_directory_with_parents();
         }
+
+        if (!settings_Images_Dir.query_exists ()){
+            settings_Images_Dir.make_directory_with_parents();
+        }
+
         if(!settings_File.query_exists ()){
             //The Settings file doesn't exist. Create and write one.
             print("Creating Settings json file, since it does not exist\n");
@@ -90,21 +99,56 @@
         
 
     }
+
     public Gee.HashSet<string> get_namarupa_names () {
         return namarupaNames;
     }
 
-    public void indicatorAdded (string name) {
-        allIndicators.add(name);
-        write_Indicator_Names (settings_IndicatorNamesFile);
+    public void export_image ( Gtk.Image image, string name ) {
+        //settings_Images_Dir is the dir the images get exported to
+        Gdk.Pixbuf pixbuf = image.get_pixbuf ();
+        //print("Exporting image of " + name + " with " + image.get_pixel_size ().to_string () + " pixels. File: " + image.file + "\n");
+        if (image != null && pixbuf == null && image.icon_name != null) {
+            try {
+                Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default ();
+                pixbuf = icon_theme.load_icon (image.icon_name, 16, 0);
+            } catch (Error e) {
+                warning (e.message);
+            }
+        }
+
+        
+
+        if(image.gicon != null){
+            //print("image of " + name + "contains gicon.\n");
+            Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default ();
+            Gtk.IconInfo info = icon_theme.lookup_by_gicon(image.gicon, 16, Gtk.IconLookupFlags.USE_BUILTIN);
+            pixbuf = info.load_icon ();
+        }
+        GLib.File save_file = File.new_for_commandline_arg(settings_Images_Dir.get_path () + "/" + name + ".png");
+        if(pixbuf != null && !save_file.query_exists ()){
+            print("Exporting pixbuf of " + name + " to file.\n");
+            pixbuf.save (save_file.get_path (), "png");
+        } else {
+            print("No pixbuf for " + name + " or file exists already.\n");
+        }
+
+
     }
 
-    public static Settings get_instance (Gee.HashSet<string> allIndicators) {
+    public void indicatorAdded (string name, Gtk.Image image) {
+        allIndicators.add(name);
+        write_Indicator_Names (settings_IndicatorNamesFile);
+        export_image (image, name);
+    }
+
+    public static Settings get_instance () { //Gee.HashSet<string> allIndicators
         if(instance == null) {
-            instance = new Settings (allIndicators);
+            instance = new Settings ();
         }
         return instance;
     }
+
 
     void settings_File_changed () {
         print("Settings File changed. \n");
@@ -193,10 +237,13 @@
         Json.Node root = parser.get_root ();
 
         Json.Array indicator_list = root.get_object ().get_array_member ("allIndicators");
+        int i = 0;
         foreach (var node in indicator_list.get_elements ()){
             //print("IND: " + node.get_string () + "\n");
             this.allIndicators.add(node.get_string ());
+            i++;
         }
+        print("Indicator names loaded: " + i.to_string() + "\n");
     }
 
     private void get_Settings_from_Json_string (string jsonString) {

@@ -25,13 +25,14 @@
     private Gtk.Stack stack;
     private Gtk.Box? main_box = null;
 
+    private Settings settings;
     Gee.Collection<AyatanaCompatibility.IndicatorIface> indicators;
 
 	public int cpt = 0; /* count indicators */
 	
     public NamarupaMetaIndicator (Gee.Collection<AyatanaCompatibility.IndicatorIface> indicators, Gee.HashSet<string> blacklist, Gee.HashSet<string> namarupaNames) {
         Object (code_name: "namarupa");
-
+        settings = Settings.get_instance ();
         this.namarupaNames = namarupaNames;
         this.blacklist = blacklist;
         indicator_loader = new IndicatorFactory ();

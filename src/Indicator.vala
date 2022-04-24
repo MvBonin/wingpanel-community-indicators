@@ -38,8 +38,9 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     private Gtk.Popover popover = null;
     const int MAX_ICON_SIZE_NAMARUPA = 22;
     private bool isNamarupa = false;
-    //Settings
+
     private Settings settings;
+
 	//grouping radio buttons
 	private Gtk.RadioButton? group_radio=null ;
 	
@@ -57,7 +58,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         this.parent_object = obj;
         this.menu_map = new Gee.HashMap<Gtk.Widget, Gtk.Widget> ();
         entry_name_hint = name_hint;
-
+        settings = Settings.get_instance ();
         if (entry.menu == null) {
             critical ("Indicator: %s has no menu widget.", entry_name_hint);
             return;
@@ -99,6 +100,7 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
                 image.pixel_size = MAX_ICON_SIZE;
 
                 icon.set_widget (IndicatorButton.WidgetSlot.IMAGE, image, entry_name_hint);
+                settings.export_image (image, entry_name_hint);
             }
 
             var label = entry.label;
@@ -116,6 +118,10 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
         }
 
         return icon;
+    }
+
+    public Gtk.Image get_image (){
+        return entry.image as Gtk.Image;
     }
 
     public string name_hint () {

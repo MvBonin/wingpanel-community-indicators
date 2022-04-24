@@ -34,7 +34,7 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
 
         deferred_indicators = new Gee.LinkedList<AyatanaCompatibility.Indicator>();
         allIndicatorNames = new Gee.HashSet<string> ();
-        settings = Settings.get_instance( allIndicatorNames );
+        settings = Settings.get_instance();
 
         load_blacklist ();
         
@@ -81,7 +81,7 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         if(!blacklist.contains(indicator.name_hint ())){
             this.allIndicatorNames.add (indicator.name_hint ());
             print("added "+ indicator.name_hint () + " to indicatornames...\n");
-            settings.indicatorAdded(indicator.name_hint ());
+            settings.indicatorAdded(indicator.name_hint (), indicator.get_image ());
         }
 
         if (blacklist.contains (indicator.name_hint ()) || namarupaNames.contains (indicator.name_hint ())) {
