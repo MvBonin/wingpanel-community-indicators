@@ -51,9 +51,9 @@
     private Settings () {
         this.allIndicators = new Gee.HashSet<string> ();
         this.namarupaNames = new Gee.HashSet<string> ();
-        namarupaNames.add("Nextcloud");
+        /*namarupaNames.add("Nextcloud");
         namarupaNames.add("ulauncher");
-        namarupaNames.add("KeePassXC");
+        namarupaNames.add("KeePassXC");*/
 
         print("Settings initiated \n");
 
@@ -77,6 +77,8 @@
             //The Settings file doesn't exist. Create and write one.
             print("Creating Settings json file, since it does not exist\n");
             write_file( settings_File, generate_Json_String ());
+        } else {
+            read_Settings_File ();
         }
         if(!settings_IndicatorNamesFile.query_exists ()){
             //The Settings file doesn't exist. Create and write one.
@@ -152,10 +154,13 @@
 
     void settings_File_changed () {
         print("Settings File changed. \n");
+        read_Settings_File ();
+        //TODO: Fire event to update settings in MetaIndicator and NamarupaMetaindicator
+        settings_updated ();
+    }
+    void read_Settings_File () {
         string file = read_file(settings_File);
         get_Settings_from_Json_string(file);
-        //TODO: Fire event to update settings in MetaIndicator and NamarupaMetaindicator
-
     }
 
 
@@ -259,6 +264,6 @@
         showEmptyNamarupaIndicator = root.get_object ().get_boolean_member ("showEmptyNamarupaIndicator");
         
     }
-
+    public signal void settings_updated ();
 
 }
