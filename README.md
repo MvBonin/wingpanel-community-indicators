@@ -1,17 +1,19 @@
 # Wingpanel Community Indicators (Ayatana support)
 
-This fork combines ayatana indicators with the namarupa project, giving the user more freedom of decision, what to show where.
+This fork combines ayatana indicators with the namarupa project, giving the user more freedom of decision, which indicators should be presented where.
 
-Right now, indicator settings are hardcoded. We need to work on a Settings menu or a switchboard plug.
+I am currently working on a switchboard-plug this project lives in symbiosis with.
+<b>If you want to use community-indicators, please <a href="https://github.com/MvBonin/switchboard-plug-indicators">install MvBonin/switchboard-plug-indicators from here!</a></b>
 
 
 <h1>Description:</h1>
+
 Keep compatibility with ubuntu/unity indicators on Elementary OS wingpanel.
+
 If you want to install applications with indicators like weather forecast, redshift, social networks... this plug-in let these indicators appear in your panel.
 
 <p align="center"><img src="screenshot.png"/> </p>
 
-<b>Important:</b> To add support for Legacy icons (Wine, PlayOnLinux) see here : <a href="https://github.com/msmaldi/wingpanel-indicator-na-tray">msmaldi/wingpanel-indicator-na-tray</a>
 
 <h2>Dependencies</h2>
 
@@ -50,18 +52,18 @@ Search the parameter: OnlyShowIn= and add "Pantheon" at the end of the line :
 Save your changes (Ctrl+X to quit + Y(es) save the changes + Enter to valid the filename).<br/>
 </ul>
 
-3.<b>reboot</b>.
+<b>reboot</b>.
+
+
 
 <h1>Build and install (developer)</h1>
 
-1. Download the last release (zip) and extract files 
-
 <h2>Dependencies</h2>
-2. You'll need all the dependencies from easy install and these to build : 
+You'll need all the dependencies from easy install and these to build : 
 <pre>sudo apt-get install valac gcc meson </pre/>
 
 <h2>Build with meson</h2>
-3. Open a Terminal in the extracted folder, build your application with meson and install it with ninja:<br/>
+Open a Terminal in the extracted folder, build your application with meson and install it with ninja:<br/>
 
 <pre>meson build --prefix=/usr
 cd build
