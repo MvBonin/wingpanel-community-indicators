@@ -35,7 +35,7 @@ Make sure, you follow the instructions in <b>"Parameters for Pantheon"</b>. Othe
   You'll need the following dependencies :
 
 <pre>sudo apt-get install valac gcc meson 
-sudo apt-get install libglib2.0-dev libgranite-dev libindicator3-dev </pre>
+sudo apt-get install libglib2.0-dev libgranite-dev libindicator3-dev libjson-glib-dev </pre>
 
 
 - Version Hera (5) and previous :  
