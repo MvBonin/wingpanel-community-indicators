@@ -2,7 +2,7 @@
 
 <p align="center"><img src="screenshot.png"/> </p>
 
-This fork combines <b>ayatana indicators</b> with the <b>namarupa</b> project, giving the user <b>more freedom of decision</b>, which indicators should be presented where while keeping compatibility with ubuntu/unity indicators on elementary OS (Pantheon) wingpanel.
+This fork combines <b>ayatana indicators</b> with the <b>namarupa</b> project, giving the user <b>more freedom of decision</b>, which indicators should be presented where while keeping <b>compatibility</b> with ubuntu/unity indicators on <b>elementary OS</b> (Pantheon) wingpanel.
 
 I am currently working on a switchboard-plug this project lives in symbiosis with.
 
@@ -10,8 +10,7 @@ I am currently working on a switchboard-plug this project lives in symbiosis wit
 
 
 
-
-If you want to install applications with indicators like weather forecast, redshift, social networks... this plug-in let these indicators appear in your panel.
+This adds support for all kinds of different indicators, like Steam, Nextcloud, KeePassXC and lots more.
 
 
 
@@ -27,9 +26,9 @@ cd build
 ninja
 sudo ninja install
 </pre>
-Make sure, you follow the instructions in "Parameters in Pantheon". Otherwise it might not work.
+Make sure, you follow the instructions in <b>"Parameters for Pantheon"</b>. Otherwise it might not work.
 
-
+<h1></h1>
 
 <details>
   <summary><b>Dependencies:</b> </summary>
