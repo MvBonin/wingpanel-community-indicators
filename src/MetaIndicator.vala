@@ -57,7 +57,11 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         
         //Instanciate Namarupa Indicator
         namarupaMetaIndicator = new NamarupaMetaIndicator(indicators, blacklist, namarupaNames);
-        
+        if (namarupaNames.size > 0) {
+            Wingpanel.IndicatorManager manager = Wingpanel.IndicatorManager.get_default ();
+            //Add namarupa Indicator
+            manager.register_indicator(namarupaMetaIndicator.code_name, namarupaMetaIndicator);
+        }
         
     }
 
@@ -122,8 +126,6 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
             }
 
 
-            //Add namarupa Indicator
-            manager.register_indicator(namarupaMetaIndicator.code_name, namarupaMetaIndicator);
 
             deferred_indicators.clear();
             wingpanel_defer_register = false; // Any future indicators are probably safe.
