@@ -11,7 +11,7 @@ I am currently working on a switchboard-plug this project lives in symbiosis wit
 
 
 This adds support for all kinds of different indicators, like Steam, Nextcloud, KeePassXC and lots more.
-
+It is <b>currently under developement and subject to change a lot. Use it at your own risk and update it often.</b>
 
 
 
