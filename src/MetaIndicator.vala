@@ -51,17 +51,15 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         this.visible = false;
         var indicators = indicator_loader.get_indicators ();
 
+        //Instanciate Namarupa Indicator
+        namarupaMetaIndicator = new NamarupaMetaIndicator(indicators, blacklist, namarupaNames);
+        Wingpanel.IndicatorManager.get_default ().register_indicator (namarupaMetaIndicator.code_name, namarupaMetaIndicator);
+
         foreach (var indicator in indicators) {
             load_indicator (indicator);
         }
         
-        //Instanciate Namarupa Indicator
-        namarupaMetaIndicator = new NamarupaMetaIndicator(indicators, blacklist, namarupaNames);
-        if (namarupaNames.size > 0) {
-            Wingpanel.IndicatorManager manager = Wingpanel.IndicatorManager.get_default ();
-            //Add namarupa Indicator
-            manager.register_indicator(namarupaMetaIndicator.code_name, namarupaMetaIndicator);
-        }
+        
         
     }
 
@@ -110,7 +108,7 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
         GLib.Timeout.add(250, () => {
             // If there are any unrealized widgets, we need to keep waiting.
             foreach (Wingpanel.Indicator indicator in Wingpanel.IndicatorManager.get_default ().get_indicators ()) {
-                if (indicator.visible && indicator.get_display_widget ().get_realized () == false) return true;
+                if (indicator.visible && indicator.get_display_widget ().get_realized () == false && indicator.code_name != "namarupa") return true;
             }
 
             // Have all indicator display widgets resize themselves later.
@@ -126,6 +124,8 @@ public class AyatanaCompatibility.MetaIndicator : Wingpanel.Indicator {
             }
 
 
+            //Add namarupa Indicator
+            manager.register_indicator(namarupaMetaIndicator.code_name, namarupaMetaIndicator);
 
             deferred_indicators.clear();
             wingpanel_defer_register = false; // Any future indicators are probably safe.

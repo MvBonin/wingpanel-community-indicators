@@ -127,7 +127,7 @@
             Gtk.IconInfo info = icon_theme.lookup_by_gicon(image.gicon, 16, Gtk.IconLookupFlags.USE_BUILTIN);
             pixbuf = info.load_icon ();
         }
-        GLib.File save_file = File.new_for_commandline_arg(settings_Images_Dir.get_path () + "/" + name + ".png");
+        GLib.File save_file = File.new_for_commandline_arg(settings_Images_Dir.get_path () + "/" + name.replace("/", "..") + ".png");
         if(pixbuf != null && !save_file.query_exists ()){
             print("Exporting pixbuf of " + name + " to file.\n");
             pixbuf.save (save_file.get_path (), "png");
