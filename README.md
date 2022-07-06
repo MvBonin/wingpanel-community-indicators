@@ -14,7 +14,9 @@ This adds support for all kinds of different indicators, like Steam, Nextcloud, 
 It is <b>currently under developement and subject to change a lot. Use it at your own risk and update it often.</b>
 
 
-
+<h2>Easy Installation</h2>
+Download .deb file and install it via
+<pre>sudo apt install ./FILENAME.deb</pre>
 
  ## Build and install:
 First install the <b>dependencies</b> listed below.

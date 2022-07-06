@@ -1,12 +1,13 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: wingpanel-indicator-ayatana
-Source: https://github.com/lafydev/wingpanel-indicator-ayatana
+Source: https://github.com/mvbonin/wingpanel-community-indicators
 
 Files: *
 Copyright: 2015-2016 Djax <parnold@gmx.de>
     2016-2020 Elementary
     2018 Ethan P. 
     2020 Lafydev <lafy@mailo.com>
+    2022 MvBonin <mvbonin@bonintech.de>
 License: GPL-3.0+
  
 Files: debian/*
