@@ -36,15 +36,17 @@ Make sure, you follow the instructions in <b>"Parameters for Pantheon"</b>. Othe
   <summary><b>Dependencies:</b> </summary>
   You'll need the following dependencies :
 
-<pre>sudo apt-get install valac gcc meson 
+<pre>sudo apt-get install valac gcc meson cmake
 sudo apt-get install libglib2.0-dev libgranite-dev libindicator3-dev libjson-glib-dev </pre>
-
 
 - Version Hera (5) and previous :  
   <pre>sudo apt-get install libwingpanel-2.0-dev</pre>
 
-- Version Odin(6) and later:   
+- Version Odin(6), Horus(7) and later:
   <pre>sudo apt-get install libwingpanel-dev indicator-application</pre>
+
+- Also Version Horus(7) if your Indicators don't get shown:
+  <pre>sudo apt-get install gir1.2-appindicator3-0.1</pre>
 
 </details>
 
