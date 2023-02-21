@@ -1,0 +1,11 @@
+Package: com.github.mvbonin.wingpanel-community-indicators
+Version: 2.0.10
+Architecture: amd64
+Maintainer: MvBonin <mvbonin@bonintech.de>
+Installed-Size: 97
+Depends: libc6 (>= 2.4), libgdk-pixbuf-2.0-0 (>= 2.22.0), libgee-0.8-2 (>= 0.8.3), libglib2.0-0 (>= 2.37.3), libgtk-3-0 (>= 3.16.2), libindicator3-7 (>= 0.4.90), libjson-glib-1.0-0 (>= 1.5.2), libwingpanel3, indicator-application, gir1.2-appindicator3-0.1
+Enhances: wingpanel
+Section: x11
+Priority: optional
+Description: WingPanel Community Indicators
+ Fork of Ayatana Indicator bringing you support and more control of your Indicators

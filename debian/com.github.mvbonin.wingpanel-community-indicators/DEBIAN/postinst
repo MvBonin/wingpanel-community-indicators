@@ -1,0 +1,3 @@
+#!/bin/sh
+sed -i 's/^OnlyShowIn.*/OnlyShowIn=Unity;GNOME;Pantheon;/' /etc/xdg/autostart/indicator-application.desktop
+exit 0

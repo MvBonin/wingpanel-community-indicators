@@ -17,7 +17,7 @@ Standards-Version: 4.1.4
 
 Package: com.github.mvbonin.wingpanel-community-indicators
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, indicator-application
+Depends: ${misc:Depends}, ${shlibs:Depends}, indicator-application, gir1.2-appindicator3-0.1,
 Enhances: wingpanel
 Description: WingPanel Community Indicators
  Fork of Ayatana Indicator bringing you support and more control of your Indicators
