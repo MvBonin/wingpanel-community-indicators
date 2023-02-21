@@ -159,7 +159,7 @@
     }
 
 
-    private string[] get_restrictions_from_file (File file) {
+   /* private string[] get_restrictions_from_file (File file) {
         var restrictions = new string[] {};
 
         if (file.query_exists ()) {
@@ -178,12 +178,12 @@
         }
 
         return restrictions;
-    }
+    }*/ 
 
     // TODO: Plug for Namarupa.  
     private void show_settings () {
 		/* temporary used for informations */
-		string msg = cpt.to_string () + " item(s)\n";
+		//string msg = cpt.to_string () + " item(s)\n";
 		/*var msgdial = new Gtk.MessageDialog (null,
 		                                     Gtk.DialogFlags.DESTROY_WITH_PARENT,
                                                    Gtk.MessageType.INFO,

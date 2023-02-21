@@ -24,7 +24,7 @@
     private Gtk.Widget the_label;
     private Gtk.Widget the_image;
     private Gtk.Box box;
-    private string name;
+    private string name_h;
 
     construct {
         box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -34,7 +34,7 @@
 
     public void set_widget (WidgetSlot slot, Gtk.Widget widget, string name_hint) {
         Gtk.Widget old_widget = null;
-        this.name = name_hint;
+        this.name_h = name_hint;
         if (slot == WidgetSlot.LABEL) {
             old_widget = the_label;
         } else if (slot == WidgetSlot.IMAGE) {
@@ -62,7 +62,7 @@
     }
 
     public string name_hint (){
-        return this.name;
+        return this.name_h;
     }
 }
 

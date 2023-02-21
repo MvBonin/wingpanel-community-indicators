@@ -157,8 +157,12 @@ public class AyatanaCompatibility.Indicator : Wingpanel.Indicator {
     }
 
     public bool on_scroll (Gdk.EventScroll event) {
+
         //print("SCROLLED");
-        parent_object.entry_scrolled (entry, 1, (IndicatorAyatana.ScrollDirection)event.direction);
+
+        //This is commented out for now, because it caused indicators to crash. 
+        //Maybe the vapi has to be updated? Could be an issue with gir1.2-appindicator3-0.1
+        //parent_object.entry_scrolled (entry, 1, (IndicatorAyatana.ScrollDirection)event.direction);
 
         return Gdk.EVENT_PROPAGATE;
     }

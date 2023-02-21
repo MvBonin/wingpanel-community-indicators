@@ -66,11 +66,20 @@
         settings_IndicatorNamesFile = File.new_for_commandline_arg(settingsDir + "indicatorNames.json");
         
         if (!settings_Dir.query_exists ()){
-            settings_Dir.make_directory_with_parents();
+            try{
+                settings_Dir.make_directory_with_parents();
+            }catch (GLib.Error e){
+                print("Error: %s\n" , e.message);
+            }
+            
         }
 
         if (!settings_Images_Dir.query_exists ()){
-            settings_Images_Dir.make_directory_with_parents();
+            try{
+                settings_Images_Dir.make_directory_with_parents();
+            }catch (GLib.Error e){
+                print("Error: %s\n" , e.message);
+            }
         }
 
         if(!settings_File.query_exists ()){
@@ -90,12 +99,15 @@
             read_Indicator_Names (settings_IndicatorNamesFile);
         }
 
-        monitor = settings_File.monitor ( //to track directory use .monitor_directory
-            GLib.FileMonitorFlags.NONE
-        );
-        monitor.changed.connect(settings_File_changed);
-        print("Monitoring: " + settings_File.get_path() + "\n");
-
+        try{
+                monitor = settings_File.monitor ( //to track directory use .monitor_directory
+                GLib.FileMonitorFlags.NONE
+            );
+            monitor.changed.connect(settings_File_changed);
+            print("Monitoring: " + settings_File.get_path() + "\n");
+        }catch(GLib.Error e){
+            print("Error setting up monitor: %s\n", e.message);
+        }
         defaultIndicatorsPlace = Place.MAIN;
         showEmptyNamarupaIndicator = true;
         
@@ -125,12 +137,22 @@
             //print("image of " + name + "contains gicon.\n");
             Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default ();
             Gtk.IconInfo info = icon_theme.lookup_by_gicon(image.gicon, 16, Gtk.IconLookupFlags.USE_BUILTIN);
-            pixbuf = info.load_icon ();
+            try {
+                pixbuf = info.load_icon ();
+            } catch (Error e) {
+                warning (e.message);
+            }
+            
         }
         GLib.File save_file = File.new_for_commandline_arg(settings_Images_Dir.get_path () + "/" + name.replace("/", "..") + ".png");
         if(pixbuf != null && !save_file.query_exists ()){
             print("Exporting pixbuf of " + name + " to file.\n");
-            pixbuf.save (save_file.get_path (), "png");
+            try {
+                pixbuf.save (save_file.get_path (), "png");
+            } catch (Error e) {
+                warning (e.message);
+            }
+            
         } else {
             print("No pixbuf for " + name + " or file exists already.\n");
         }
@@ -238,7 +260,12 @@
         string jsonString = read_file (file);
 
         Json.Parser parser = new Json.Parser ();
-        parser.load_from_data (jsonString, -1);
+        try{
+            parser.load_from_data (jsonString, -1);
+        }catch(GLib.Error e){
+            print("Error: %s\n", e.message);
+        }
+        
         Json.Node root = parser.get_root ();
 
         Json.Array indicator_list = root.get_object ().get_array_member ("allIndicators");
@@ -253,7 +280,12 @@
 
     private void get_Settings_from_Json_string (string jsonString) {
         Json.Parser parser = new Json.Parser ();
-        parser.load_from_data (jsonString, -1);
+        try{
+            parser.load_from_data (jsonString, -1);
+        }catch(GLib.Error e){
+            print("Error: %s\n", e.message);
+        }
+        
         Json.Node root = parser.get_root ();
 
         Json.Array nama_indicator_list = root.get_object ().get_array_member ("namarupaIndicators");
